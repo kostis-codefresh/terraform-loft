@@ -28,9 +28,12 @@ resource "loft_space_instance" "example-space" {
 }
 
 resource "loft_virtual_cluster_instance" "example-vcluster" {
+
+  count = 5
+
   metadata {
     namespace = "loft-p-default"
-    name      = "example-vcluster2"
+    name      = "example-vcluster2-${count.index}"
   }
   spec {
     owner {
