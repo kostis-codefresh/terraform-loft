@@ -17,8 +17,8 @@ provider "loft" {}
 
 resource "loft_space_instance" "example-space" {
   metadata {
-    namespace = "default"
-    name      = "example-space"
+    namespace = "loft-p-default"
+    name      = "example-space2"
   }
   spec {
     template_ref {
@@ -29,8 +29,8 @@ resource "loft_space_instance" "example-space" {
 
 resource "loft_virtual_cluster_instance" "example-vcluster" {
   metadata {
-    namespace = "default"
-    name      = "example-vcluster"
+    namespace = "loft-p-default"
+    name      = "example-vcluster2"
   }
   spec {
     owner {
