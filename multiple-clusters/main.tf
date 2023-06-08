@@ -1,7 +1,7 @@
 terraform {
 
   backend "kubernetes" {
-    secret_suffix = "state"
+    secret_suffix = "multiple-clusters-local"
     config_path   = "~/.kube/config"
   }
   required_providers {

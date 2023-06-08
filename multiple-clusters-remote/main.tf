@@ -1,7 +1,7 @@
 terraform {
 
   backend "kubernetes" {
-    secret_suffix = "multiple-clusters"
+    secret_suffix = "multiple-clusters-remote"
     config_path   = "~/.kube/config"
   }
   required_providers {
@@ -13,7 +13,11 @@ terraform {
 
 }
 
-provider "loft" {}
+provider "loft" {
+  host       = var.loft_host
+  access_key = var.loft_access_key
+  insecure   = var.loft_insecure
+}
 
 resource "loft_space_instance" "example-space" {
   metadata {
