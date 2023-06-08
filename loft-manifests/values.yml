@@ -1,0 +1,18 @@
+ingress:
+  annotations:
+    # Make sure the following line matches the name of your issuer (or use the section below to create one)
+    cert-manager.io/cluster-issuer: lets-encrypt-http-issuer
+  tls:
+    enabled: true
+    secret: tls-loft
+
+certIssuer:
+  create: true                                      # Change this if you already have your own cert-issuer
+  name: lets-encrypt-http-issuer
+  email: "kostis@codefresh.io"                               # REQUIRED
+  secretName: loft-letsencrypt-credentials
+  httpResolver:
+    enabled: true
+    ingressClass: nginx
+  resolvers: []
+  server: https://acme-v02.api.letsencrypt.org/directory
