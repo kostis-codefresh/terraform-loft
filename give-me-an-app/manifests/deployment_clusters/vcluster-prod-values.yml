@@ -1,3 +1,4 @@
 syncer:
   extraArgs:
   - --tls-san=prod.tf-demo.sales-dev.codefresh.io
+fallbackHostDns: true  
