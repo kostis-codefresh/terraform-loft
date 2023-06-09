@@ -4,7 +4,7 @@ resource "helm_release" "target_vcluster_prod" {
   create_namespace = true
   repository       = "https://charts.loft.sh"
   chart            = "vcluster"
-  version          = "0.11.2"
+  # version          = "0.11.2"
 
   values = [
     file("${path.module}/manifests/deployment_clusters/vcluster-prod-values.yml")
@@ -16,8 +16,8 @@ resource "helm_release" "target_vcluster_staging" {
   namespace        = "target-vcluster-staging"
   create_namespace = true
   repository       = "https://charts.loft.sh"
-  chart            = "vcluster"
-  version          = "0.11.2"
+  chart            = "vcluster-k0s"
+  # version          = "0.11.2"
 
   values = [
     file("${path.module}/manifests/deployment_clusters/vcluster-staging-values.yml")
@@ -30,8 +30,8 @@ resource "helm_release" "target_vcluster_qa" {
   namespace        = "target-vcluster-qa"
   create_namespace = true
   repository       = "https://charts.loft.sh"
-  chart            = "vcluster"
-  version          = "0.11.2"
+  chart            = "vcluster-k8s"
+  # version          = "0.11.2"
 
   values = [
     file("${path.module}/manifests/deployment_clusters/vcluster-qa-values.yml")

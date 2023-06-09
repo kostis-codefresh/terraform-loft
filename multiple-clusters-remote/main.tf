@@ -19,17 +19,7 @@ provider "loft" {
   insecure   = var.loft_insecure
 }
 
-resource "loft_space_instance" "example-space" {
-  metadata {
-    namespace = "loft-p-default"
-    name      = "example-space2"
-  }
-  spec {
-    template_ref {
-      name = "isolated-space"
-    }
-  }
-}
+
 
 resource "loft_virtual_cluster_instance" "example-vcluster" {
 
@@ -43,8 +33,8 @@ resource "loft_virtual_cluster_instance" "example-vcluster" {
     owner {
       user = "admin"
     }
-    template_ref {
-      name = "isolated-vcluster"
+    template {
+
     }
   }
 }
