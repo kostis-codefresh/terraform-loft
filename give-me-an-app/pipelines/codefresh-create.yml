@@ -6,7 +6,7 @@ version: "1.0"
 stages:
   - "prepare"
   - "infra"
-  - "verify"
+  - "configure"
 
 steps:
   clone:
@@ -15,7 +15,7 @@ steps:
     repo: "kostis-codefresh/terraform-loft"
     # CF_BRANCH value is auto set when pipeline is triggered
     # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
-    revision: "${{CF_BRANCH}}"
+    revision: "main"
     git: "github-1"
     stage: "prepare"
 
@@ -27,16 +27,16 @@ steps:
     commands:
       - kubectl config use-context loft-real-cluster
 
-  # DeployWithTerraform:
-  #   image: hashicorp/terraform:1.3.7
-  #   title: "Creating virtual clusters"
-  #   working_directory: "${{clone}}" 
-  #   stage: infra
-  #   commands:
-  #     - cp -r /codefresh/volume/sensitive/.kube/ ~/.kube 
-  #     - cd give-me-an-app
-  #     - terraform init
-  #     - terraform refresh
+  DeployWithTerraform:
+    image: hashicorp/terraform:1.3.7
+    title: "Creating virtual clusters"
+    working_directory: "${{clone}}" 
+    stage: infra
+    commands:
+      - cp -r /codefresh/volume/sensitive/.kube/ ~/.kube 
+      - cd give-me-an-app
+      - terraform init
+      - terraform apply -auto-approve
 
   Verify:
     image: ghcr.io/loft-sh/vcluster-cli
@@ -50,7 +50,7 @@ steps:
     image: ghcr.io/loft-sh/vcluster-cli
     title: Getting Virtual Contexts
     working_directory: "${{clone}}" 
-    stage: infra
+    stage: configure
     commands:
       - vcluster connect target-vcluster-prod -n target-vcluster-prod  --server=https://prod.tf-demo.sales-dev.codefresh.io --kube-config-context-name prod-virtual-cluster --context loft-real-cluster
 
@@ -62,7 +62,7 @@ steps:
     image: codefresh/kubectl
     title: Creating Service accounts
     working_directory: "${{clone}}" 
-    stage: infra
+    stage: configure
     fail_fast: true
     commands:
       - kubectl config use-context prod-virtual-cluster
@@ -76,7 +76,7 @@ steps:
     image: codefresh/cli
     title: Attaching VClusters to Codefresh
     working_directory: "${{clone}}" 
-    stage: infra
+    stage: configure
     fail_fast: true
     commands:
       - codefresh create cluster --kube-context prod-virtual-cluster

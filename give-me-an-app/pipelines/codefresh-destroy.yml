@@ -16,7 +16,7 @@ steps:
     repo: "kostis-codefresh/terraform-loft"
     # CF_BRANCH value is auto set when pipeline is triggered
     # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
-    revision: "${{CF_BRANCH}}"
+    revision: "main"
     git: "github-1"
     stage: "prepare"
 
