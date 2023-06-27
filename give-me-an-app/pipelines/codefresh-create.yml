@@ -72,6 +72,7 @@ steps:
       - kubectl create clusterrolebinding default-admin --clusterrole cluster-admin --serviceaccount=default:default -n default | true
       - kubectl config use-context staging-virtual-cluster
       - kubectl create clusterrolebinding default-admin --clusterrole cluster-admin --serviceaccount=default:default -n default | true
+      - kubectl config use-context loft-real-cluster
       
   AttachVirtualContext:
     image: codefresh/cli
