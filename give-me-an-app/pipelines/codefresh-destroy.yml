@@ -5,7 +5,7 @@ version: "1.0"
 # Stages can help you organize your steps in stages
 stages:
   - "prepare"
-  - "unlink"
+  - "pipelines"
   - "infra"
   - "verify"
 
@@ -19,30 +19,39 @@ steps:
     revision: "main"
     git: "github-1"
     stage: "prepare"
+    
+  ChooseCluster:
+    image: codefresh/kubectl
+    title: "Using K8s for Terraform state"
+    working_directory: "${{clone}}" 
+    stage: prepare
+    commands:
+      - kubectl config use-context loft-real-cluster    
 
+  DestroyResourcesWithTerraform:
+    image: hashicorp/terraform:1.3.7
+    title: "Removing pipelines"
+    working_directory: "${{clone}}" 
+    stage: pipelines
+    commands:
+      - cp -r /codefresh/volume/sensitive/.kube/ ~/.kube 
+      - cd create-pipelines
+      - terraform init
+      - terraform destroy -auto-approve
+      
   RemoveVirtualContext:
     image: codefresh/cli
     title: Removing VClusters from Codefresh
     working_directory: "${{clone}}" 
-    stage: unlink
+    stage: pipelines
     fail_fast: true
     commands:
       - codefresh delete cluster prod-virtual-cluster || true
       - codefresh delete cluster qa-virtual-cluster || true
       - codefresh delete cluster staging-virtual-cluster  || true 
       
-  ChooseCluster:
-    image: codefresh/kubectl
-    title: "Choosing Real cluster"
-    working_directory: "${{clone}}" 
-    stage: infra
-    commands:
-      - kubectl config use-context loft-real-cluster
-      
-      
-    
 
-  DestroyWithTerraform:
+  DestroyInfraWithTerraform:
     image: hashicorp/terraform:1.3.7
     title: "Destroying virtual clusters"
     working_directory: "${{clone}}" 

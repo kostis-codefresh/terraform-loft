@@ -7,6 +7,7 @@ stages:
   - "prepare"
   - "infra"
   - "configure"
+  - "pipelines"
 
 steps:
   clone:
@@ -82,3 +83,14 @@ steps:
       - codefresh create cluster --kube-context prod-virtual-cluster
       - codefresh create cluster --kube-context qa-virtual-cluster
       - codefresh create cluster --kube-context staging-virtual-cluster
+      
+  DeployResourcesWithTerraform:
+    image: hashicorp/terraform:1.3.7
+    title: "Creating pipelines and repo"
+    working_directory: "${{clone}}" 
+    stage: pipelines
+    commands:
+      - cp -r /codefresh/volume/sensitive/.kube/ ~/.kube 
+      - cd create-pipelines
+      - terraform init
+      - terraform apply -auto-approve      
