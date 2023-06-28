@@ -23,7 +23,7 @@ provider "loft" {
 
 resource "loft_virtual_cluster_instance" "example-vcluster" {
 
-  count = 4
+  count = 6
 
   metadata {
     namespace = "loft-p-default"
